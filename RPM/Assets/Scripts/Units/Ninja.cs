@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ninja : BaseUnit
+public class Ninja : Unit
 {
-    public int _level;
-    public string _name;
-    public int _maxHP;
-    public int _currentHP;
+    public  int level = 1;
+    public new string  _name { get; set; }
+    public  int maxHP = 20;
+    public int _currentHP = 20;
+    public int _sanity = 100;
+
+   
+
     public enum State {WAIT, TURN, DEAD}
 }
