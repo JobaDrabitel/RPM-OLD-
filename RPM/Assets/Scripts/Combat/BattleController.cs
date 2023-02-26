@@ -5,9 +5,10 @@ using UnityEngine;
 public class BattleController : MonoBehaviour
 {
     [SerializeField] private BattleContainer _battleContainer;
-    private Unit _playerUnit;
-    private GameObject _player;
-    private Unit _enemyUnit;
+    private Ninja _playerUnit;
+    private GameObject _playerClone;
+    private Rat _enemyUnit;
+    private GameObject _enemyClone;
     private void Start()
     {
        _battleContainer.state = BattleContainer.BattleState.START;
@@ -15,11 +16,23 @@ public class BattleController : MonoBehaviour
     }
     public void SetupBattle()
     {
-         _player = Instantiate(_battleContainer.playerPrefab, _battleContainer.playerSpawnPoint);
-        _playerUnit = _player.GetComponent<Unit>();
-        GameObject enemy = Instantiate(_battleContainer.enemyPrefab, _battleContainer.enemySpawnPoint);
-        _enemyUnit = enemy.GetComponent<Unit>();
+        _playerClone = Instantiate(_battleContainer.playerPrefab, _battleContainer.playerSpawnPoint);
+        _playerUnit = _playerClone.GetComponent<Ninja>();
+        _enemyClone = Instantiate(_battleContainer.enemyPrefab, _battleContainer.enemySpawnPoint);
+        _enemyUnit = _enemyClone.GetComponent<Rat>();
+        _battleContainer.state = BattleContainer.BattleState.PLAYERTURN;
+        Debug.Log(_enemyUnit._name);
+        Debug.Log(_playerUnit._name);
     }
-  
+    private void PlayerAction()
+    {
+        _playerUnit.Atack(_playerUnit._damage, _enemyUnit);
+        Debug.Log(_enemyUnit._currentHP);
+    }
+    
+    public void OnAtackButtonClick()
+    {
+        PlayerAction();
+    }
 }
 
