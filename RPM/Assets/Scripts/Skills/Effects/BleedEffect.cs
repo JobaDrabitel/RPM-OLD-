@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class BleedEffect : MonoBehaviour, IEffect
 {
-    [SerializeField] private Unit unit;
-    private Ninja ninja;
-   public void Effect(GameObject target, int lvl)
+    //[SerializeField] private Unit unit;
+   public void Effect(Unit target, int lvl)
     {
-       //if(unit._state == Unit.State.TURN)
-       // { }
-    }
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (target.State == Unit.StateMachine.TURN)
         {
-            Debug.Log(ninja._name);
+            target.TakeDamage(3 * lvl);
         }
     }
+   
 }

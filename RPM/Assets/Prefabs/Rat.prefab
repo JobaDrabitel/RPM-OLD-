@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4318393177888315306}
   - component: {fileID: 4406244100813667705}
   - component: {fileID: 6742160912825931327}
+  - component: {fileID: 4953410956105176427}
+  - component: {fileID: 248687046668942025}
   m_Layer: 0
   m_Name: Rat
   m_TagString: Untagged
@@ -97,8 +99,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 243e2694b9e9018449b1ab7ed57b0086, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _level: 1
-  _name: "\u041A\u0440\u044B\u0441\u0430"
-  _maxHP: 10
   _currentHP: 10
   _sanity: 100
+  _skills:
+  - {fileID: 4953410956105176427}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &4953410956105176427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567268536444172407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4072c136bd771438c51a5f7703c00f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _plague: {fileID: 248687046668942025}
+--- !u!114 &248687046668942025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567268536444172407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd951d0c6900a234399510484175264e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

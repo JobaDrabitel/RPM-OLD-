@@ -11,6 +11,10 @@ GameObject:
   - component: {fileID: 5424856118995963527}
   - component: {fileID: 6253682373101553309}
   - component: {fileID: 1738218286701403258}
+  - component: {fileID: -2095483159678782193}
+  - component: {fileID: 6803822624228773343}
+  - component: {fileID: 1739696787539725540}
+  - component: {fileID: 1549417692252958674}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -97,9 +101,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09eec40dd1185d3448a66b3e0ca200ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 1
-  _name: "\u041D\u0438\u043D\u0434\u0437\u044F"
-  maxHP: 20
-  _currentHP: 20
-  _sanity: 100
-  _damage: 9
+  _skills:
+  - {fileID: 0}
+  - {fileID: 1739696787539725540}
+  - {fileID: 6803822624228773343}
+--- !u!114 &-2095483159678782193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238115705478470852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7747e247c5cba894abd881ae8e279daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6803822624228773343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238115705478470852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf0f5fdddee29b74ba4962ddb6de666a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bleed: {fileID: -2095483159678782193}
+--- !u!114 &1739696787539725540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238115705478470852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6219416bc1f1e0d42be8e3ec478d5592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _armorBuff: {fileID: 1549417692252958674}
+--- !u!114 &1549417692252958674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238115705478470852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f5e95485d4fa1428e687081de24438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
