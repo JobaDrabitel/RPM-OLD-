@@ -1,22 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Ninja : Unit 
 {
-    private int _level = 1;
-    public override int Level { get => _level; set => _level = value; }
+    private int _lvl = 1;
+    public override int Lvl { get => _lvl; }
+    private int _EXP = 0;
+    private int _EXPForNewLvl = 0;
+    public override int EXP => _EXP;
     private string _name = "Íèíäçÿ";
-    public override string Name { get =>_name; set =>_name = value; } 
+    public override string Name { get =>_name; set => _name = value; } 
     private int _maxHP = 20;
     public override int MaxHP { get => _maxHP; set => _maxHP = value; }
     private int _currentHP = 20;
-    public override int ÑurrentHP { get => _currentHP; set => _currentHP = value; }
+    public override int CurrentHP { get => _currentHP;}
     private int _sanity = 100;
     public override int Sanity { get => _sanity; set => _sanity = value; }
     private int _damage = 10;
     public override int Damage { get => _damage; set => _damage = value ; }
     private int _armor = 0;
+    private int _initiative = 10;
+    public override int Initiative { get => _initiative; set => _initiative = value; }
     public override int Armor { get => _armor; set => _armor = value; }
     [SerializeField] private Skill[] _skills = new Skill[3];
     public override Skill GetSkill(int index)
@@ -26,6 +32,21 @@ public class Ninja : Unit
     public override void SetSkill(int index, Skill skill)
     {
         _skills[index] = skill;
+    }
+    private List<IEffect> _currentEffects = new List<IEffect>();
+    public override void GetCurrentEffects()
+    {
+        foreach (IEffect effect in _currentEffects)
+        {
+            effect.Effect(this);
+            effect.CurrentDurationDecrease();
+            if (effect.CurrentDuration <= 0)
+                _currentEffects.Remove(effect);
+        }
+    }
+    public override void SetCurrentEffects(IEffect effect)
+    {
+        _currentEffects.Add(effect);
     }
     private StateMachine _state = StateMachine.TURN;
     public override StateMachine State { get => _state; set => _state = value; }
@@ -45,5 +66,24 @@ public class Ninja : Unit
         Debug.Log("Ïîõóé ïðîåáàëè");
         this.gameObject.SetActive(false);
     }
-
+    protected override void LvlUp()
+    {
+        _lvl++;
+        _maxHP += Convert.ToInt32(_maxHP * 0.1 + 0.5);
+        _currentHP = _maxHP;
+        _EXPForNewLvl *= 2;
+        _initiative++;
+    }
+    public override void AddExp(int exp)
+    {
+        _EXP += exp;
+        if (_EXP >= _EXPForNewLvl)
+            LvlUp();
+    }
+    public override void Heal(int heal)
+    {
+        _currentHP += heal;
+        if (_currentHP > _maxHP)
+            _currentHP = _maxHP;
+    }
 }

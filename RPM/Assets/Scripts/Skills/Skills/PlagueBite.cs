@@ -6,10 +6,10 @@ public class PlagueBite : Skill
 {
     private readonly int _skillID = 2;
     public override int SkillId { get => _skillID; }
-    private readonly string _skillName = "Ворез пены";
+    private readonly string _skillName = "Укус СПИДа";
     public override string SkillName { get => _skillName; }
 
-    private readonly string _skillDescription = "Порезать вену и наложить кровотечение";
+    private readonly string _skillDescription = "Надо было предохраняться";
     public override string SkillDescription { get => _skillDescription; }
 
     private int _skillLevel = 1;
@@ -25,9 +25,13 @@ public class PlagueBite : Skill
     private Unit _target;
     public override Unit Target { get => _target; set => _target = value; }
 
-    public override void CastEffect()
+    public override void AddEffect()
     {
         _target.TakeDamage(5);
-        _plague.Effect(_target, _skillLevel);
+        _target.SetCurrentEffects(_plague);
+    }
+    public override void CauseEffect()
+    {
+        _plague.Effect(_target);
     }
 }

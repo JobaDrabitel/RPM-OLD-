@@ -25,8 +25,12 @@ public class ArmorBuff : Skill
     private Unit _target;
     public override Unit Target { get => _target; set => _target = value; }
 
-    public override void CastEffect()
+    public override void AddEffect()
     {
-       _armorBuff.Effect(_target, _skillLevel);
+        _target.SetCurrentEffects(_armorBuff);
+    }
+    public override void CauseEffect()
+    {
+        _armorBuff.Effect(_target);
     }
 }

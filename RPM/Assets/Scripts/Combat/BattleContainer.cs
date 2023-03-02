@@ -10,4 +10,8 @@ public class BattleContainer : MonoBehaviour
     public Transform enemySpawnPoint;
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
+    public GameObject[] prefabs = new GameObject[8];
+    public Unit[] units = new Unit[8];
+    public Unit currentUnit;
+    public int turn;
 }

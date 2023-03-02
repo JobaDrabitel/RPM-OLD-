@@ -4,13 +4,27 @@ using UnityEngine;
 
 public class BleedEffect : MonoBehaviour, IEffect
 {
-    //[SerializeField] private Unit unit;
-   public void Effect(Unit target, int lvl)
+    private int _duration = 3;
+    private int _currentDuration = 3;
+
+    public int Duration => _duration;
+
+    public int CurrentDuration => _currentDuration;
+
+    public void Effect(Unit target)
     {
         if (target.State == Unit.StateMachine.TURN)
         {
-            target.TakeDamage(3 * lvl);
+            target.TakeDamage(target.CurrentHP/10);
         }
     }
-   
+
+    public void CurrentDurationDecrease()
+    {
+        _currentDuration--;
+    }
+    public void CurrentDurationSet()
+    {
+        _currentDuration = _duration;
+    }
 }

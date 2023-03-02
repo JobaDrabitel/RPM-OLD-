@@ -25,9 +25,13 @@ public class BleedAtack : Skill
     private Unit _target;
     public override Unit Target { get => _target; set => _target = value; }
 
-    public override void CastEffect()
+    public override void CauseEffect()
     {
-        _target.TakeDamage(8);
-        _bleed.Effect(_target, _skillLevel);
+        _bleed.CurrentDurationSet();
+        _bleed.Effect(_target);
+    }
+    public override void AddEffect()
+    {
+        _target.SetCurrentEffects(_bleed);
     }
 }
