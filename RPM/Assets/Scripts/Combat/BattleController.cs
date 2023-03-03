@@ -10,6 +10,8 @@ public class BattleController : MonoBehaviour
     private GameObject _playerClone;
     private Unit _enemyUnit;
     private GameObject _enemyClone;
+    private Unit _skillTarget;
+    private bool _isSkillUsed = false;
     private void Start()
     {
         _battleContainer.state = BattleContainer.BattleState.START;
@@ -18,13 +20,13 @@ public class BattleController : MonoBehaviour
     public void SetupBattle()
     {
         SpawnUnit();
-        _playerUnit = _playerClone.GetComponent<Unit>();
-        _enemyClone = Instantiate(_battleContainer.enemyPrefab, _battleContainer.enemySpawnPoint);
-        _enemyUnit = _enemyClone.GetComponent<Unit>();
+        //_playerUnit = _playerClone.GetComponent<Unit>();
+        //_enemyClone = Instantiate(_battleContainer.enemyPrefab, _battleContainer.enemySpawnPoint);
+        //_enemyUnit = _enemyClone.GetComponent<Unit>();
         _battleContainer.state = BattleContainer.BattleState.PLAYERTURN;
-        _battleHUD.SetupBattleHUD(_playerUnit, _enemyUnit);
-        Debug.Log(_enemyUnit.Name);
-        Debug.Log(_playerUnit.Name);
+        //_battleHUD.SetupBattleHUD(_playerUnit, _enemyUnit);
+        //Debug.Log(_enemyUnit.Name);
+        //Debug.Log(_playerUnit.Name);
     }
     private void UseSkill(int index, Unit unit, Unit target)
     {
@@ -42,6 +44,7 @@ public class BattleController : MonoBehaviour
     {
         if (_battleContainer.state == BattleContainer.BattleState.PLAYERTURN)
         {
+            _isSkillUsed = true;
             StartCoroutine(PlayerAction(2, _enemyUnit));
         }
     }
@@ -49,6 +52,7 @@ public class BattleController : MonoBehaviour
     {
         if (_battleContainer.state == BattleContainer.BattleState.PLAYERTURN)
         {
+            _isSkillUsed = true;
             StartCoroutine(PlayerAction(1, _enemyUnit));
         }
     }
@@ -56,6 +60,7 @@ public class BattleController : MonoBehaviour
     {
         if (_battleContainer.state == BattleContainer.BattleState.PLAYERTURN)
         {
+            _isSkillUsed = true;
             StartCoroutine(PlayerAction(0, _enemyUnit));
         }
     }
@@ -87,18 +92,19 @@ public class BattleController : MonoBehaviour
     }
     public IEnumerator PlayerAction(int index, Unit target)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitUntil(()=>_skillTarget != null);
         UseSkill(index, _playerUnit, target);
         yield return new WaitForSeconds(1f);
+
     }
     public void SpawnUnit()
     {
         for (int i = 0; i < 8; i++)
         {
             if (i <= 3)
-                Instantiate(_battleContainer.prefabs[i], _battleContainer.playerSpawnPoint);
+                Instantiate(_battleContainer.prefabs[i], _battleContainer.spawnpoints[i]);
             else
-                Instantiate(_battleContainer.prefabs[i], _battleContainer.enemySpawnPoint);
+                Instantiate(_battleContainer.prefabs[i], _battleContainer.spawnpoints[i]);
             _battleContainer.units[i] = _battleContainer.prefabs[i].GetComponent<Unit>();
         }
     }
@@ -117,6 +123,14 @@ public class BattleController : MonoBehaviour
                 }
             }
         }
+    }
+    public void GetTarget(int index)
+    {
+        if (_isSkillUsed)
+            _skillTarget = _battleContainer.units[index];
+        else
+            _battleHUD.DisplayDescription(_battleContainer.units[index]);
+
     }
 }
 

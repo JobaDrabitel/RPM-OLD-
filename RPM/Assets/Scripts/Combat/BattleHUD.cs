@@ -21,5 +21,9 @@ public class BattleHUD : MonoBehaviour
             _playerHPBar.value = player.CurrentHP;
             _enemyHPBar.value = enemy.CurrentHP;
     }
+    public void DisplayDescription(Unit target)
+    {
+        _description.text = target.Name;
+    }
 
 }
