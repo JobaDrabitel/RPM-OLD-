@@ -27,6 +27,7 @@ public class BleedAtack : Skill
 
     public override void CauseEffect()
     {
+        _target.TakeDamage(5);
         _bleed.CurrentDurationSet();
         _bleed.Effect(_target);
     }

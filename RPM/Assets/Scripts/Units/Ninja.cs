@@ -6,11 +6,17 @@ using UnityEngine;
 public class Ninja : Unit 
 {
     private int _lvl = 1;
+    private void OnMouseDown()
+    {
+        Debug.Log("на меня нажали");
+    }
     public override int Lvl { get => _lvl; }
     private int _EXP = 0;
     private int _EXPForNewLvl = 0;
     public override int EXP => _EXP;
     private string _name = "Ниндзя";
+    private bool _isPlayable;
+    public override bool IsPlayable { get => _isPlayable; set => _isPlayable = value; }
     public override string Name { get =>_name; set => _name = value; } 
     private int _maxHP = 20;
     public override int MaxHP { get => _maxHP; set => _maxHP = value; }
@@ -22,7 +28,7 @@ public class Ninja : Unit
     public override int Damage { get => _damage; set => _damage = value ; }
     private int _armor = 0;
     private int _initiative = 10;
-    public override int Initiative { get => _initiative; set => _initiative = value; }
+    public override int Initiative => _initiative;
     public override int Armor { get => _armor; set => _armor = value; }
     [SerializeField] private Skill[] _skills = new Skill[3];
     public override Skill GetSkill(int index)
@@ -48,7 +54,7 @@ public class Ninja : Unit
     {
         _currentEffects.Add(effect);
     }
-    private StateMachine _state = StateMachine.TURN;
+    private StateMachine _state = StateMachine.WAIT;
     public override StateMachine State { get => _state; set => _state = value; }
     public override void Atack(int damage, Unit target)
     {
@@ -58,6 +64,8 @@ public class Ninja : Unit
     public override void TakeDamage(int damage)
     {
         _currentHP -= damage-_armor;
+        string log = $"Ниндзя получил {damage} урона и теперь у него {_currentHP} хп";
+        Debug.Log(log);
         if (_currentHP <= 0)
             Die();
     }
@@ -85,5 +93,15 @@ public class Ninja : Unit
         _currentHP += heal;
         if (_currentHP > _maxHP)
             _currentHP = _maxHP;
+    }
+    public override int SetRandomInitiative()
+    {
+        var rand = new System.Random();
+        _initiative += rand.Next(10);
+        return _initiative;
+    }
+    public override void ChangeInitiative(int value)
+    {
+        _initiative*=value;
     }
 }

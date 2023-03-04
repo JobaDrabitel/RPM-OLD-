@@ -6,13 +6,14 @@ public abstract class Unit : MonoBehaviour
 {
     public abstract string Name { get; set;}
     public abstract int Lvl { get;}
+    public abstract bool IsPlayable { get; set; }
     public abstract int MaxHP { get; set; }
     public abstract int CurrentHP { get;}
     public abstract int Sanity { get; set; }
     public abstract int Damage { get; set; }
     public abstract int Armor { get; set; }
     public abstract int EXP { get; }
-    public abstract int Initiative { get; set; }
+    public abstract int Initiative { get; }
     public abstract void GetCurrentEffects();
     public abstract void SetCurrentEffects(IEffect effect);
     public abstract Skill GetSkill(int index);
@@ -34,4 +35,6 @@ public abstract class Unit : MonoBehaviour
     protected abstract void LvlUp();
     public abstract void AddExp(int exp);
     public abstract void Heal(int heal);
+    public abstract int SetRandomInitiative();
+    public abstract void ChangeInitiative(int value);
 }

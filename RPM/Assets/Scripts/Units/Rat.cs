@@ -9,6 +9,8 @@ public class Rat : Unit
     private int _EXP = 0;
     private int _EXPForNewLvl = 0;
     public override int EXP => _EXP;
+    private bool _isPlayable;
+    public override bool IsPlayable { get => _isPlayable; set => _isPlayable = value; }
     private string _name = "Крысо";
     public override string Name { get => _name; set => _name = value; }
     private int _maxHP = 10;
@@ -21,8 +23,9 @@ public class Rat : Unit
     public override int Damage { get => _damage; set => _damage = value; }
     private int _armor = 0;
     public override int Armor { get => _armor; set => _armor = value; }
-    private int _initiative = 10;
-    public override int Initiative { get => _initiative; set => _initiative = value; }
+    private int _initiative = 9;
+    public override int Initiative => _initiative;
+
     private List<IEffect> _currentEffects = new();
     public override void GetCurrentEffects()
     {
@@ -54,6 +57,8 @@ public class Rat : Unit
     public override void TakeDamage(int damage)
     {
         _currentHP -= damage-_armor;
+        string log = $"Крыса получила {damage} урона и теперь у нее {_currentHP} хп";
+        Debug.Log(log);
         if (_currentHP <= 0)
             Die();
 
@@ -77,5 +82,14 @@ public class Rat : Unit
         if (_currentHP > _maxHP)
             _currentHP = _maxHP;
     }
-
+    public override int SetRandomInitiative()
+    {
+        var rand = new System.Random();
+        _initiative += rand.Next(10);
+        return _initiative;
+    }
+    public override void ChangeInitiative(int value)
+    {
+        _initiative *= value;
+    }
 }

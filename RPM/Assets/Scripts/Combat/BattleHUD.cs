@@ -4,26 +4,32 @@ using UnityEngine.UI;
 
 public class BattleHUD : MonoBehaviour
 {
-    [SerializeField] BattleContainer _battleContainer;
-    [SerializeField] Slider _playerHPBar;
-    [SerializeField] Slider _enemyHPBar;
-    [SerializeField] Text _description;
-    public void SetupBattleHUD(Unit player, Unit enemy)
+    [SerializeField] private BattleContainer _battleContainer;
+    [SerializeField] private Slider[] _hpBars = new Slider[8];
+    [SerializeField] private Text _description;
+    public void SetupBattleHUD(Unit[] units)
     {
-        _playerHPBar.maxValue = player.MaxHP;
-        _enemyHPBar.maxValue = enemy.MaxHP;
-        _playerHPBar.value = player.CurrentHP;
-        _enemyHPBar.value = enemy.CurrentHP;
+        HPBarValueChange(units);
         _description.text = "Твоя мама микроабобус";
     }
-    public void HPBarValueChange(Unit player, Unit enemy)
+    public void HPBarValueChange(Unit[] units)
     {
-            _playerHPBar.value = player.CurrentHP;
-            _enemyHPBar.value = enemy.CurrentHP;
+         for (int i = 0; i < units.Length; i++)
+        {
+            _hpBars[i].maxValue = units[i].MaxHP;
+            _hpBars[i].value = units[i].CurrentHP;
+        }
+
     }
-    public void DisplayDescription(Unit target)
+    public void DisplayUnitDescription(Unit target)
     {
-        _description.text = target.Name;
+        _description.text = target.Name+ "\n Уровень: " + target.Lvl.ToString() + 
+            "\n Здоровье: " + target.CurrentHP.ToString() +"/"+ target.MaxHP.ToString() + 
+            "\n Броня: "+ target.Armor.ToString() + "\n Рассудок: " + target.Sanity.ToString();
+    }
+    public void DisplaySkillDescriprion(Skill skill)
+    {
+        _description.text = skill.SkillName + "\n" + skill.SkillDescription + "\n Уровень: " + skill.SkillLevel.ToString();
     }
 
 }
