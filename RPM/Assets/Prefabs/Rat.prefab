@@ -103,8 +103,8 @@ MonoBehaviour:
   _sanity: 100
   _skills:
   - {fileID: 4953410956105176427}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4953410956105176427}
+  - {fileID: 4953410956105176427}
 --- !u!114 &4953410956105176427
 MonoBehaviour:
   m_ObjectHideFlags: 0

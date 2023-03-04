@@ -73,6 +73,7 @@ public class Ninja : Unit
     {
         Debug.Log("Похуй проебали");
         this.gameObject.SetActive(false);
+        this.State = StateMachine.DEAD;
     }
     protected override void LvlUp()
     {

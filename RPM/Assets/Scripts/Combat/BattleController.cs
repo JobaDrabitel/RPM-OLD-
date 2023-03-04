@@ -17,15 +17,19 @@ public class BattleController : MonoBehaviour
         SetTurnsOrder();
         ChangeTurn();
         _battleHUD.SetupBattleHUD(_battleContainer.units);
+        if (!_currentUnit.IsPlayable)
+           StartCoroutine(EnemyAction());
     }
     private void UseSkill(int index, Unit unit, Unit target)
     {
         Skill skill = unit.GetSkill(index);
         skill.Target = target;
+        string log = $"{unit.Name} использует {skill.SkillName} на {target.Name}!";
+        Debug.Log(log);
         skill.AddEffect();
         skill.CauseEffect();
         _battleHUD.HPBarValueChange(_battleContainer.units);
-        Debug.Log(target.CurrentHP);
+        _battleHUD.DisplayUnitDescription(target);
         _skillTarget = null;
         _isSkillUsed = false;
         unit.State = Unit.StateMachine.WAIT;
@@ -38,7 +42,7 @@ public class BattleController : MonoBehaviour
     {
         if (_currentUnit.IsPlayable)
         {
-            Skill skill = _currentUnit.GetSkill(3);
+            Skill skill = _currentUnit.GetSkill(2);
             _battleHUD.DisplaySkillDescriprion(skill);
             _isSkillUsed = true;
             StartCoroutine(PlayerAction(2));
@@ -48,7 +52,7 @@ public class BattleController : MonoBehaviour
     {
         if (_currentUnit.IsPlayable)
         {
-            Skill skill = _currentUnit.GetSkill(2);
+            Skill skill = _currentUnit.GetSkill(1);
             _battleHUD.DisplaySkillDescriprion(skill);
             _isSkillUsed = true;
             StartCoroutine(PlayerAction(1));
@@ -66,19 +70,36 @@ public class BattleController : MonoBehaviour
     }
     public void ChangeTurn()
     {
-       _currentUnit = _sortedUnits[_currentUnitNumber];
-        _sortedUnits[_currentUnitNumber].State = Unit.StateMachine.TURN;
-        _currentUnitNumber++;
-        string log = $"Ходит юнит под номером {_currentUnitNumber}";
-        Debug.Log(log);
+        _currentUnit = _sortedUnits[_currentUnitNumber];
+        if (_sortedUnits[_currentUnitNumber].State != Unit.StateMachine.DEAD)
+        {
+            if (_sortedUnits[_currentUnitNumber].IsPlayable)
+                Debug.Log("Ваш ход!");
+            else
+                Debug.Log("Ход врага!");
+            _sortedUnits[_currentUnitNumber].State = Unit.StateMachine.TURN;
+            string log = $"Ходит {_currentUnit.Name} под номером {_currentUnitNumber+1}";
+            Debug.Log(log);
+            _currentUnitNumber++;
+        }
+        else
+        {
+            string log = $"Юнит {_currentUnit.Name} под номером {_currentUnitNumber+1} не может ходить так как умерчик!";
+            Debug.Log(log);
+            _currentUnitNumber++;
+            ChangeTurn();
+        }
         if (_currentUnitNumber >= _sortedUnits.Length)
             _currentUnitNumber = 0;
     }
     public IEnumerator EnemyAction()
     {
-        yield return new WaitForSeconds(1f);
-            UseSkill(0, _currentUnit, _battleContainer.units[3]);
-        yield return new WaitForSeconds(1f);
+        int target = 3;
+        yield return new WaitForSeconds(2f);
+        if (_battleContainer.units[target].State == Unit.StateMachine.DEAD)
+            target--;
+        UseSkill(0, _currentUnit, _battleContainer.units[target]);
+        yield return new WaitForSeconds(2f);
     }
     public IEnumerator PlayerAction(int index)
     {
