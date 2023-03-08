@@ -11,28 +11,31 @@ public class BattleController : MonoBehaviour
     private bool _isSkillUsed = false;
     private int _currentUnitNumber = 0;
     private Unit[] _sortedUnits = new Unit[8];
+    private Unit[] _playerUnits = new Unit[4];
+    private Unit[] _enemyUnits = new Unit[4];
     private void Start()
     {
+        PrepareUnitsForBattle();
         SpawnUnit();
-        SetTurnsOrder();
         ChangeTurn();
         _battleHUD.SetupBattleHUD(_battleContainer.units);
         if (!_currentUnit.IsPlayable)
            StartCoroutine(EnemyAction());
     }
-    private void UseSkill(int index, Unit unit, Unit target)
+    private void PrepareUnitsForBattle()
     {
-        Skill skill = unit.GetSkill(index);
-        skill.Target = target;
-        string log = $"{unit.Name} использует {skill.SkillName} на {target.Name}!";
-        Debug.Log(log);
-        skill.AddEffect();
-        skill.CauseEffect();
+        UnitArraysPrepare arraysPrepare = new UnitArraysPrepare();
+        _sortedUnits = arraysPrepare.ArrayByInitiativeSort(_battleContainer.units);
+        _playerUnits = arraysPrepare.SetUnitsBySide(_battleContainer.units, true);
+        _enemyUnits = arraysPrepare.SetUnitsBySide(_battleContainer.units, false);
+    }
+    private void CurrentUnitAction(int index, Unit unit, Unit target)
+    {
         _battleHUD.HPBarValueChange(_battleContainer.units);
         _battleHUD.DisplayUnitDescription(target);
+        _currentUnit.UseSkill(index, unit, target);
         _skillTarget = null;
         _isSkillUsed = false;
-        unit.State = Unit.StateMachine.WAIT;
         ChangeTurn();
         if (!_currentUnit.IsPlayable)
             StartCoroutine(EnemyAction());
@@ -98,13 +101,13 @@ public class BattleController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         if (_battleContainer.units[target].State == Unit.StateMachine.DEAD)
             target--;
-        UseSkill(0, _currentUnit, _battleContainer.units[target]);
+        CurrentUnitAction(0, _currentUnit, _battleContainer.units[target]);
         yield return new WaitForSeconds(2f);
     }
     public IEnumerator PlayerAction(int index)
     {
         yield return new WaitUntil(() => _skillTarget != null);
-        UseSkill(index, _currentUnit, _skillTarget);
+        CurrentUnitAction(index, _currentUnit, _skillTarget);
         yield return new WaitForSeconds(1f);
 
     }
@@ -126,30 +129,11 @@ public class BattleController : MonoBehaviour
             }
         }
     }
-    public void SetTurnsOrder()
-    {
-        for (int i = 0; i < 8; i++)
-        _sortedUnits[i] = _battleContainer.units[i];
-        Unit temp;
-        for (int write = 0; write < _sortedUnits.Length; write++)
-        {
-            for (int sort = 0; sort < _sortedUnits.Length-1; sort++)
-            {
-                if (_sortedUnits[sort].SetRandomInitiative() < _sortedUnits[sort + 1].SetRandomInitiative())
-                {
-                    temp = _sortedUnits[sort + 1];
-                    _sortedUnits[sort + 1] = _sortedUnits[sort];
-                    _sortedUnits[sort] = temp;
-                }
-            }
-        }
-    }
     public void GetTarget(int index)
     {
         if (_isSkillUsed && _battleContainer.units[index].State!=Unit.StateMachine.DEAD)
             _skillTarget = _battleContainer.units[index];
             _battleHUD.DisplayUnitDescription(_battleContainer.units[index]);
-
     }
 }
 

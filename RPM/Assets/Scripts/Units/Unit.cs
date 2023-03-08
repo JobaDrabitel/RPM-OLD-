@@ -37,4 +37,14 @@ public abstract class Unit : MonoBehaviour
     public abstract void Heal(int heal);
     public abstract int SetRandomInitiative();
     public abstract void ChangeInitiative(int value);
+    public virtual void UseSkill(int index, Unit unit, Unit target)
+    {
+        Skill skill = unit.GetSkill(index);
+        skill.Target = target;
+        string log = $"{unit.Name} использует {skill.SkillName} на {target.Name}!";
+        Debug.Log(log);
+        skill.AddEffect();
+        skill.CauseEffect();
+        unit.State = StateMachine.WAIT;
+    }
 }
