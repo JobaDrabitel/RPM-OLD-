@@ -12,8 +12,11 @@ public class Ninja : Unit
     }
     public override int Lvl { get => _lvl; }
     private int _EXP = 0;
-    private int _EXPForNewLvl = 0;
+    private int _EXPForNewLvl = 100;
     public override int EXP => _EXP;
+    public override int EXPForNewLvl => _EXPForNewLvl;
+    private int _EXPForKill = 20;
+    public override int EXPForKill => EXPForKill;
     private string _name = "Ниндзя";
     private bool _isPlayable;
     public override bool IsPlayable { get => _isPlayable; set => _isPlayable = value; }
@@ -81,6 +84,7 @@ public class Ninja : Unit
         _maxHP += Convert.ToInt32(_maxHP * 0.1 + 0.5);
         _currentHP = _maxHP;
         _EXPForNewLvl *= 2;
+        _EXPForKill *= 2;
         _initiative++;
     }
     public override void AddExp(int exp)

@@ -13,6 +13,8 @@ public abstract class Unit : MonoBehaviour
     public abstract int Damage { get; set; }
     public abstract int Armor { get; set; }
     public abstract int EXP { get; }
+    public abstract int EXPForNewLvl { get; }
+    public abstract int EXPForKill { get; }
     public abstract int Initiative { get; }
     public abstract void GetCurrentEffects();
     public abstract void SetCurrentEffects(IEffect effect);

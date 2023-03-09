@@ -9,6 +9,9 @@ public class Rat : Unit
     private int _EXP = 0;
     private int _EXPForNewLvl = 0;
     public override int EXP => _EXP;
+    public override int EXPForNewLvl => _EXPForNewLvl;
+    private int _EXPForKill = 20;
+    public override int EXPForKill => EXPForKill;
     private bool _isPlayable;
     public override bool IsPlayable { get => _isPlayable; set => _isPlayable = value; }
     private string _name = "Крысо";
@@ -69,6 +72,7 @@ public class Rat : Unit
         _maxHP += Convert.ToInt32(_maxHP * 0.1 + 0.5);
         _currentHP = _maxHP;
         _EXPForNewLvl *= 2;
+        _EXPForKill *= 2;
     }
     public override void AddExp(int exp)
     {
