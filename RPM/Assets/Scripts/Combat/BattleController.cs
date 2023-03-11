@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BattleController : MonoBehaviour
 {
@@ -13,14 +14,15 @@ public class BattleController : MonoBehaviour
     private Unit[] _sortedUnits = new Unit[8];
     private Unit[] _playerUnits = new Unit[4];
     private Unit[] _enemyUnits = new Unit[4];
+    private UnityEvent EnemyTurnEvent;
     private void Start()
     {
-        PrepareUnitsForBattle();
+        EnemyTurnEvent = new UnityEvent();
+        EnemyTurnEvent.AddListener(OnEnemyAction);
         SpawnUnit();
+        PrepareUnitsForBattle();
         ChangeTurn();
         _battleHUD.SetupBattleHUD(_battleContainer.units);
-        if (!_currentUnit.IsPlayable)
-           StartCoroutine(EnemyAction());
     }
     private void PrepareUnitsForBattle()
     {
@@ -79,7 +81,10 @@ public class BattleController : MonoBehaviour
             if (_sortedUnits[_currentUnitNumber].IsPlayable)
                 Debug.Log("Ваш ход!");
             else
+            {
+                EnemyTurnEvent.Invoke();
                 Debug.Log("Ход врага!");
+            }
             _sortedUnits[_currentUnitNumber].State = Unit.StateMachine.TURN;
             string log = $"Ходит {_currentUnit.Name} под номером {_currentUnitNumber+1}";
             Debug.Log(log);
@@ -134,6 +139,11 @@ public class BattleController : MonoBehaviour
         if (_isSkillUsed && _battleContainer.units[index].State!=Unit.StateMachine.DEAD)
             _skillTarget = _battleContainer.units[index];
             _battleHUD.DisplayUnitDescription(_battleContainer.units[index]);
+    }
+    public void OnEnemyAction()
+    {
+        EnemyAction();
+        _battleHUD.SetupBattleHUD(_battleContainer.units);
     }
 }
 

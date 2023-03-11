@@ -1,30 +1,23 @@
 
 public class WinDefiner
 {
-   public bool IsPlayerWin(Unit[] units)
+   
+   public bool BattleEndCheck(Unit[] playerUnits, Unit[] enemyUnits)
     {
-        int deadUnits = 0;
-        for (int i = 0; i < units.Length; i++)
+        int deadEnemyUnits = 0;
+        int deadPlayerUnits = 0;
+        for (int i = 0; i < 8; i++)
         {
-            if (units[i].State == Unit.StateMachine.DEAD)
-                deadUnits++;
+            if (playerUnits[i].State == Unit.StateMachine.DEAD)
+                deadPlayerUnits++;
+            if (enemyUnits[i].State == Unit.StateMachine.DEAD)
+                deadEnemyUnits++;
         }
-        if (deadUnits == 4)
+        if (deadEnemyUnits == 4 || deadPlayerUnits == 4)
             return true;
-    return false;
-    }
-    public bool IsPlayerLose(Unit[] units)
-    {
-        int deadUnits = 0;
-        for (int i = 0; i < units.Length; i++)
-        {
-            if (units[i].State == Unit.StateMachine.DEAD)
-                deadUnits++;
-        }
-        if (deadUnits == 4)
-            return true;
-        else
-    return false;
+        else 
+            return false;
+                
     }
 }
 

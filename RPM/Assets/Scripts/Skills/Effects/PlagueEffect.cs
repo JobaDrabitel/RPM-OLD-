@@ -22,7 +22,7 @@ public class PlagueEffect : MonoBehaviour, IEffect
     public void Effect(Unit target)
     {
         if (target.MaxHP > 5)
-        target.MaxHP -= 5;
+        target.SetMaxHP(target.MaxHP - 5);
         target.TakeDamage(5);
     }
 }

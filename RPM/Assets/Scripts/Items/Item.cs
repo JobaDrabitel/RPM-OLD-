@@ -5,14 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObject/Item", fileName = "ItemData")]
 public class Item : ScriptableObject
 {
-    [SerializeField] private int _iD;
-    [SerializeField] private string _name;
-    [SerializeField] private string _description;
-    private enum EquipSlop {HEAD, NECK, BODE, LEGS, FEET, LEFTARM, RIGHTARM }
-    [SerializeField] private EquipSlop _equipSlop;
+    [SerializeField] private int iD;
+    [SerializeField] private string itemName;
+    [SerializeField] private string description;
+    [SerializeField] private Equipment.EquipSlot _equipSlot;
     private enum QUALITY {POOR, COOMON, GOOD, WELL, MASTERLY, ARTEFACT }
-    [SerializeField] private QUALITY _quality;
-    [SerializeField] private int _price;
-    [SerializeField] private Sprite _icon;
-    [SerializeField] private Skill _effect;
+    [SerializeField] private QUALITY quality;
+    [SerializeField] private int price;
+    [SerializeField] private Sprite icon;
+    [SerializeField] private Skill skill;
 }
