@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rat : Unit, IAnimal
+public class Rat : Unit
 {
     private int _lvl = 1;
+    [SerializeField] private Sprite _icon;
+
     public override int Lvl { get => _lvl; }
     private int _EXP = 0;
     private int _EXPForNewLvl = 0;
@@ -53,7 +55,9 @@ public class Rat : Unit, IAnimal
     private StateMachine _state;
     public override StateMachine State { get => _state; set =>_state = value; }
 
-   [SerializeField] private Skill[] _skills = new Skill[3];
+    public override Sprite Icon => _icon;
+
+    [SerializeField] private Skill[] _skills = new Skill[3];
     public override Skill GetSkill(int index)
     {
         return _skills[index];
@@ -110,5 +114,20 @@ public class Rat : Unit, IAnimal
         if (_currentHP > _maxHP)
             TakeDamage(-value);
 
+    }
+    public override int ChooseTarget(Unit[] units)
+    {
+        int target = 0;
+        double maxInjuries = units[0].CurrentHP / units[0].MaxHP;
+
+        for (int i = 0; i < units.Length; i++)
+        {
+            if (maxInjuries < units[i].CurrentHP / units[i].MaxHP && units[i].State != Unit.StateMachine.DEAD)
+            {
+                maxInjuries = units[i].CurrentHP / units[i].MaxHP;
+                target = i;
+            }
+        }
+        return target;
     }
 }

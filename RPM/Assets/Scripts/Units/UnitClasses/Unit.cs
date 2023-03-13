@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Unit : MonoBehaviour
 {
     public abstract string Name { get; set;}
+    public abstract Sprite Icon { get; }
     public abstract int Lvl { get;}
     public abstract bool IsPlayable { get; set; }
     public abstract int MaxHP { get;  }
@@ -53,4 +54,5 @@ public abstract class Unit : MonoBehaviour
         unit.State = StateMachine.WAIT;
     }
     public abstract void SetMaxHP(int value);
+    public abstract int ChooseTarget(Unit[] units);
 }

@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 243e2694b9e9018449b1ab7ed57b0086, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _icon: {fileID: 253249468, guid: 795392d8ca452384ea6ba8ce654e2823, type: 3}
   _currentHP: 10
   _sanity: 100
   _skills:

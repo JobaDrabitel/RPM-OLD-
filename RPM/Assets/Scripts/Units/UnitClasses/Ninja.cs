@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ninja : Unit, IHuman
+public class Ninja : Unit
 {
     private int _lvl = 1;
+    [SerializeField] private Sprite _icon;
     private void OnMouseDown()
     {
         Debug.Log("на меня нажали");
@@ -38,6 +39,7 @@ public class Ninja : Unit, IHuman
     private int _dodgeChance = 5;
     public override int DodgeChance { get => _dodgeChance; set => _dodgeChance = value; }
 
+    public override Sprite Icon => _icon;
 
     [SerializeField] private Skill[] _skills = new Skill[3];
     public override Skill GetSkill(int index)
@@ -123,5 +125,20 @@ public class Ninja : Unit, IHuman
             _maxHP = 0;
         if (_currentHP > _maxHP)
             TakeDamage(-value);
+    }
+    public override int ChooseTarget(Unit[] units)
+    {
+        int target = 0;
+        double minDanger = units[0].CurrentHP + units[0].Armor + units[0].DodgeChance;
+
+        for (int i = 0; i < units.Length; i++)
+        {
+            if (minDanger < units[i].CurrentHP + units[i].Armor + units[i].DodgeChance && units[i].State != Unit.StateMachine.DEAD)
+            {
+                minDanger = units[i].CurrentHP + units[i].Armor + units[i].DodgeChance;
+                target = i;
+            }
+        }
+        return target;
     }
 }

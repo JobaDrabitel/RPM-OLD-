@@ -5,8 +5,8 @@ using UnityEngine.Events;
 
 public class BattleController : MonoBehaviour
 {
-    [SerializeField] private BattleHUD _battleHUD;
-    [SerializeField] private BattleContainer _battleContainer;
+    [SerializeField] private BattleHUD battleHUD;
+    [SerializeField] private BattleContainer battleContainer;
     private Unit _skillTarget;
     private Unit _currentUnit;
     private bool _isSkillUsed = false;
@@ -14,7 +14,7 @@ public class BattleController : MonoBehaviour
     private Unit[] _sortedUnits = new Unit[8];
     private Unit[] _playerUnits = new Unit[4];
     private Unit[] _enemyUnits = new Unit[4];
-    private UnityEvent EnemyTurnEvent;
+    public UnityEvent EnemyTurnEvent;
     private void Start()
     {
         EnemyTurnEvent = new UnityEvent();
@@ -22,19 +22,19 @@ public class BattleController : MonoBehaviour
         SpawnUnit();
         PrepareUnitsForBattle();
         ChangeTurn();
-        _battleHUD.SetupBattleHUD(_battleContainer.units);
+        battleHUD.SetupBattleHUD(battleContainer.units);
     }
     private void PrepareUnitsForBattle()
     {
         UnitArraysPrepare arraysPrepare = new UnitArraysPrepare();
-        _sortedUnits = arraysPrepare.ArrayByInitiativeSort(_battleContainer.units);
-        _playerUnits = arraysPrepare.SetUnitsBySide(_battleContainer.units, true);
-        _enemyUnits = arraysPrepare.SetUnitsBySide(_battleContainer.units, false);
+        _sortedUnits = arraysPrepare.ArrayByInitiativeSort(battleContainer.units);
+        _playerUnits = arraysPrepare.SetUnitsBySide(battleContainer.units, true);
+        _enemyUnits = arraysPrepare.SetUnitsBySide(battleContainer.units, false);
     }
     private void CurrentUnitAction(int index, Unit unit, Unit target)
     {
-        _battleHUD.HPBarValueChange(_battleContainer.units);
-        _battleHUD.DisplayUnitDescription(target);
+        battleHUD.HPBarValueChange(battleContainer.units);
+        battleHUD.DisplayUnitDescription(target);
         _currentUnit.UseSkill(index, unit, target);
         _skillTarget = null;
         _isSkillUsed = false;
@@ -48,7 +48,7 @@ public class BattleController : MonoBehaviour
         if (_currentUnit.IsPlayable)
         {
             Skill skill = _currentUnit.GetSkill(2);
-            _battleHUD.DisplaySkillDescriprion(skill);
+            battleHUD.DisplaySkillDescriprion(skill);
             _isSkillUsed = true;
             StartCoroutine(PlayerAction(2));
         }
@@ -58,7 +58,7 @@ public class BattleController : MonoBehaviour
         if (_currentUnit.IsPlayable)
         {
             Skill skill = _currentUnit.GetSkill(1);
-            _battleHUD.DisplaySkillDescriprion(skill);
+            battleHUD.DisplaySkillDescriprion(skill);
             _isSkillUsed = true;
             StartCoroutine(PlayerAction(1));
         }
@@ -68,7 +68,7 @@ public class BattleController : MonoBehaviour
         if (_currentUnit.IsPlayable)
         {
             Skill skill = _currentUnit.GetSkill(0);
-            _battleHUD.DisplaySkillDescriprion(skill);
+            battleHUD.DisplaySkillDescriprion(skill);
             _isSkillUsed = true;
             StartCoroutine(PlayerAction(0));
         }
@@ -102,11 +102,9 @@ public class BattleController : MonoBehaviour
     }
     public IEnumerator EnemyAction()
     {
-        int target = 3;
+        int target = _currentUnit.ChooseTarget(_playerUnits);
         yield return new WaitForSeconds(2f);
-        if (_battleContainer.units[target].State == Unit.StateMachine.DEAD)
-            target--;
-        CurrentUnitAction(0, _currentUnit, _battleContainer.units[target]);
+        CurrentUnitAction(0, _currentUnit, battleContainer.units[target]);
         yield return new WaitForSeconds(2f);
     }
     public IEnumerator PlayerAction(int index)
@@ -122,28 +120,28 @@ public class BattleController : MonoBehaviour
         {
             if (i <= 3)
             {
-                GameObject playerClone = Instantiate(_battleContainer.prefabs[i], _battleContainer.spawnpoints[i]);
+                GameObject playerClone = Instantiate(battleContainer.prefabs[i], battleContainer.spawnpoints[i]);
                 playerClone.GetComponent<Unit>().IsPlayable = true;
-                _battleContainer.units[i] = playerClone.GetComponent<Unit>();
+                battleContainer.units[i] = playerClone.GetComponent<Unit>();
             }
             else
             {
-                GameObject enemyClone = Instantiate(_battleContainer.prefabs[i], _battleContainer.spawnpoints[i]);
+                GameObject enemyClone = Instantiate(battleContainer.prefabs[i], battleContainer.spawnpoints[i]);
                 enemyClone.GetComponent<Unit>().IsPlayable = false;
-                _battleContainer.units[i] = enemyClone.GetComponent<Unit>();
+                battleContainer.units[i] = enemyClone.GetComponent<Unit>();
             }
         }
     }
     public void GetTarget(int index)
     {
-        if (_isSkillUsed && _battleContainer.units[index].State!=Unit.StateMachine.DEAD)
-            _skillTarget = _battleContainer.units[index];
-            _battleHUD.DisplayUnitDescription(_battleContainer.units[index]);
+        if (_isSkillUsed && battleContainer.units[index].State!=Unit.StateMachine.DEAD)
+            _skillTarget = battleContainer.units[index];
+            battleHUD.DisplayUnitDescription(battleContainer.units[index]);
     }
     public void OnEnemyAction()
     {
         EnemyAction();
-        _battleHUD.SetupBattleHUD(_battleContainer.units);
+        battleHUD.SetupBattleHUD(battleContainer.units);
     }
 }
 
