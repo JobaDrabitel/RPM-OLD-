@@ -7,8 +7,13 @@ public class UnitsSelector : MonoBehaviour
 {
     [SerializeField] private GameObject unitIconPrefab;
     [SerializeField] Transform iconsSpawnPoint;
+<<<<<<< Updated upstream
     [SerializeField] private List<Unit> playerUnits = new List<Unit>();
     [SerializeField] private List<Image> unitsIcons = new List<Image>();
+=======
+    [SerializeField] private List<Unit> playerUnits = new();
+    [SerializeField] private List<Image> unitsIcons = new();
+>>>>>>> Stashed changes
     private Unit[] _selectedUnits = new Unit[4];
     private Text _description;
 
